@@ -1,27 +1,32 @@
 import "./App.css";
 import { ExpenseItem } from "./components/ExpenseItem/ExpenseItem";
 import { Container } from "react-bootstrap";
+import { useState } from "react";
+
+const list_expenses = [
+	{
+		id: 1,
+		date: "20 jan 2022",
+		title: "Toilet Paper",
+		amount: 40,
+	},
+	{
+		id: 2,
+		date: "21 jan 2022",
+		title: "ladies Shoe",
+		amount: 100,
+	},
+];
 
 function App() {
-	const expenses = [
-		{
-			id: 1,
-			date: "20 jan 2022",
-			title: "Toilet Paper",
-			amount: 40,
-		},
-		{
-			id: 2,
-			date: "21 jan 2022",
-			title: "ladies Shoe",
-			amount: 100,
-		},
-	];
+	const [expenses, setExpenses] = useState(list_expenses);
 
 	const handleExpense = (expense) => {
-		console.log("from app.js");
-		console.log(expense);
+		setExpenses((previousExpesne) => {
+			return [...previousExpesne, expense];
+		});
 	};
+
 	return (
 		<div className="App">
 			<Container>
