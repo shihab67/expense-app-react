@@ -36,10 +36,15 @@ export const ExpenseItem = (props) => {
 			) : (
 				filteredExpenses.map((expense, key) => {
 					return (
-						<Card className="mb-3 bg-secondary text-white" key={key}>
+						<Card
+							className="mb-3 bg-secondary text-white"
+							key={key}
+						>
 							<Card.Body>
 								<Row>
-									<Col md={2}>{expense.date}</Col>
+									<Col md={2}>
+										{new Date(expense.date).toDateString()}
+									</Col>
 									<Col md={7}>{expense.title}</Col>
 									<Col md={3} className="taka">
 										${expense.amount}
