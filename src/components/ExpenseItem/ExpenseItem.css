@@ -1,8 +1,4 @@
-.card-box{
-	background-color: #e4efea;
-}
-
-.taka{
+.taka {
 	display: flex;
 	justify-content: flex-end;
 }

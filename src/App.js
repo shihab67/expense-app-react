@@ -6,13 +6,13 @@ import { useState } from "react";
 const list_expenses = [
 	{
 		id: 1,
-		date: "20 jan 2022",
+		date: "2022-05-01",
 		title: "Toilet Paper",
 		amount: 40,
 	},
 	{
 		id: 2,
-		date: "21 jan 2022",
+		date: "2022-05-02",
 		title: "ladies Shoe",
 		amount: 100,
 	},

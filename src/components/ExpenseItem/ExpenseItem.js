@@ -1,6 +1,8 @@
-import { Row, Col, Card } from "react-bootstrap";
+import { Row, Col, Card, Alert } from "react-bootstrap";
 import "./ExpenseItem.css";
 import { ExpenseForm } from "../ExpenseForm/ExpenseForm";
+import { ExpenseSearch } from "../ExpenseSearch/ExpenseSearch";
+import { useState } from "react";
 
 export const ExpenseItem = (props) => {
 	const saveExpenseDataHandler = (enteredExpenseData) => {
@@ -11,22 +13,43 @@ export const ExpenseItem = (props) => {
 		props.onSaveExpense(expenseData);
 	};
 
+	const [year, setYear] = useState(); 
+
+	const handleFilter = (year) => {
+		setYear(year);
+	};
+
+	const filteredExpenses = props.expenses.filter((expense) => {
+		return new Date(expense.date).getFullYear().toString() === year;
+	});
+
 	return (
 		<div>
 			<ExpenseForm onSaveExpenseData={saveExpenseDataHandler} />
-			{props.expenses.map((expense) => (
-				<Card className="mb-3 card-box">
-					<Card.Body>
-						<Row>
-							<Col md={2}>{expense.date}</Col>
-							<Col md={7}>{expense.title}</Col>
-							<Col md={3} className="taka">
-								${expense.amount}
-							</Col>
-						</Row>
-					</Card.Body>
-				</Card>
-			))}
+
+			<ExpenseSearch onYearFilter={handleFilter} />
+
+			{filteredExpenses.length === 0 ? (
+				<Alert variant="primary">
+					No expenses found for this year!
+				</Alert>
+			) : (
+				filteredExpenses.map((expense, key) => {
+					return (
+						<Card className="mb-3 bg-secondary text-white" key={key}>
+							<Card.Body>
+								<Row>
+									<Col md={2}>{expense.date}</Col>
+									<Col md={7}>{expense.title}</Col>
+									<Col md={3} className="taka">
+										${expense.amount}
+									</Col>
+								</Row>
+							</Card.Body>
+						</Card>
+					);
+				})
+			)}
 		</div>
 	);
 };
