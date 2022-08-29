@@ -1,67 +1,21 @@
-import React from "react";
-import {
-	Chart as ChartJS,
-	CategoryScale,
-	LinearScale,
-	BarElement,
-	Title,
-	Tooltip,
-	Legend,
-} from "chart.js";
-import { Bar } from "react-chartjs-2";
+import ChartBar from "./ChartBar";
+import "./Chart.css";
 
-ChartJS.register(
-	CategoryScale,
-	LinearScale,
-	BarElement,
-	Title,
-	Tooltip,
-	Legend
-);
-
-export const Chart = (props) => {
-	const options = {
-		responsive: true,
-		plugins: {
-			legend: {
-				position: "top",
-			},
-			title: {
-				display: true,
-				text: "Chart.js Bar Chart",
-			},
-		},
-	};
-
-	const monthNames = [
-		"January",
-		"February",
-		"March",
-		"April",
-		"May",
-		"June",
-		"July",
-		"August",
-		"September",
-		"October",
-		"November",
-		"December",
-	];
-
-	const labels = props.expenses.map((expense) => {
-		return monthNames[new Date(expense.date).getMonth()];
-	});
-
-	const data = {
-		labels,
-		datasets: [
-			{
-				label: "Dataset 1",
-				data: labels.map(() => [Math.random() * 100]),
-				backgroundColor: "rgba(255, 99, 132, 0.5)",
-			},
-		],
-	};
-
-	return <Bar options={options} data={data} height={"100px"} />;
+export default function Chart(props) {
+	const dataPointValues = props.dataPoints.map(
+		(dataPoint) => dataPoint.value
+	);
+	const totalMaximun = Math.max(...dataPointValues);
+	return (
+		<div className="chart mb-4">
+			{props.dataPoints.map((dataPoint) => (
+				<ChartBar
+					key={dataPoint.label}
+					value={dataPoint.value}
+					maxValue={totalMaximun}
+					label={dataPoint.label}
+				/>
+			))}
+		</div>
+	);
 };

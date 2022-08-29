@@ -2,7 +2,7 @@ import { Row, Col, Card, Alert } from "react-bootstrap";
 import "./ExpenseItem.css";
 import { ExpenseForm } from "../ExpenseForm/ExpenseForm";
 import { ExpenseSearch } from "../ExpenseSearch/ExpenseSearch";
-import {Chart} from '../Chart/Chart';
+import ExpensesChart from '../ExpensesChart/ExpensesChart';
 import { useState } from "react";
 
 export const ExpenseItem = (props) => {
@@ -30,7 +30,7 @@ export const ExpenseItem = (props) => {
 
 			<ExpenseSearch onYearFilter={handleFilter} />
 
-			<Chart expenses={filteredExpenses} />
+			<ExpensesChart expenses={filteredExpenses} />
 
 			{filteredExpenses.length === 0 ? (
 				<Alert variant="primary">
