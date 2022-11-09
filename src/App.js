@@ -1,37 +1,31 @@
-import React, { useState } from "react";
-import AddUSer from "./Components/Users/AddUser";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
-import UsersList from "./Components/Users/UsersList";
+import React, { useState } from 'react';
+
+import Login from './components/Login/Login';
+import Home from './components/Home/Home';
+import MainHeader from './components/MainHeader/MainHeader';
 
 function App() {
-	const [usersList, setUsersList] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-	const addUserHandler = (username, age) => {
-		setUsersList(() => {
-			return [...usersList, { username: username, age: age }];
-		});
-	};
+  const loginHandler = (email, password) => {
+    // We should of course check email and password
+    // But it's just a dummy/ demo anyways
+    setIsLoggedIn(true);
+  };
 
-	return (
-		<>
-			<div className="container mt-4">
-				<AddUSer onAddUser={addUserHandler} />
-				<UsersList users={usersList} />
-			</div>
-			<ToastContainer
-				position="top-right"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-			/>
-		</>
-	);
+  const logoutHandler = () => {
+    setIsLoggedIn(false);
+  };
+
+  return (
+    <React.Fragment>
+      <MainHeader isAuthenticated={isLoggedIn} onLogout={logoutHandler} />
+      <main>
+        {!isLoggedIn && <Login onLogin={loginHandler} />}
+        {isLoggedIn && <Home onLogout={logoutHandler} />}
+      </main>
+    </React.Fragment>
+  );
 }
 
 export default App;
