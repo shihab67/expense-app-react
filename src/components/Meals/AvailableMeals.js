@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import cartContext from "../../store/cart-context";
 import classes from "./AvailableMeals.module.css";
 import { Meal } from "./Meal";
 
@@ -29,8 +30,20 @@ const DUMMY_MEALS = [
 	},
 ];
 
-export const AvailableMeals = () => {
-	const meals = DUMMY_MEALS.map((meal) => <Meal meal={meal} />);
+export const AvailableMeals = (props) => {
+	const cartCtx = useContext(cartContext);
+	const addItemToCartHandler = (amount, meal) => {
+		cartCtx.addItem({
+			id: meal.id,
+			name: meal.name,
+			amount: amount,
+			price: meal.price,
+		});
+	};
+
+	const meals = DUMMY_MEALS.map((meal) => (
+		<Meal onAddToCart={addItemToCartHandler} key={meal.id} meal={meal} />
+	));
 
 	return <section className={classes.meals}>{meals}</section>;
 };

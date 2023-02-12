@@ -6,9 +6,9 @@ import { HeaderCartButton } from "./HeaderCartButton";
 export const Header = () => {
 	return (
 		<>
-			<nav class="navbar navbar-dark bg-dark">
-				<div class="container-fluid">
-					<span class="navbar-brand">Food Ordering App</span>
+			<nav className="navbar navbar-dark bg-dark">
+				<div className="container-fluid">
+					<span className="navbar-brand">Food Ordering App</span>
 					<HeaderCartButton />
 				</div>
 			</nav>
