@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import cartContext from "../../store/cart-context";
 import classes from "./AvailableMeals.module.css";
 import { Meal } from "./Meal";
@@ -31,6 +31,9 @@ const DUMMY_MEALS = [
 ];
 
 export const AvailableMeals = (props) => {
+	const [mealsList, setMealsList] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [httpError, setHttpError] = useState(null);
 	const cartCtx = useContext(cartContext);
 	const addItemToCartHandler = (amount, meal) => {
 		cartCtx.addItem({
@@ -41,7 +44,55 @@ export const AvailableMeals = (props) => {
 		});
 	};
 
-	const meals = DUMMY_MEALS.map((meal) => (
+	useEffect(() => {
+		const fetchMeals = async () => {
+			setIsLoading(true);
+			const response = await fetch(
+				"https://react-udemy-course-cb818-default-rtdb.firebaseio.com/meals.json"
+			);
+
+			if (!response.ok) {
+				throw new Error("Something went wrong!");
+			}
+
+			const responseData = await response.json();
+			const loadedItems = [];
+
+			for (const key in responseData) {
+				loadedItems.push({
+					id: key,
+					name: responseData[key].name,
+					description: responseData[key].description,
+					price: responseData[key].price,
+				});
+			}
+			setMealsList(loadedItems);
+			setIsLoading(false);
+		};
+
+		fetchMeals().catch((error) => {
+			setIsLoading(false);
+			setHttpError(error.message);
+		});
+	}, []);
+
+	if (httpError) {
+		return (
+			<>
+				<p className="text-center text-danger">{httpError}</p>
+			</>
+		);
+	}
+
+	if (isLoading) {
+		return (
+			<>
+				<p className="text-center text-primary">Loading...</p>
+			</>
+		);
+	}
+
+	const meals = mealsList.map((meal) => (
 		<Meal onAddToCart={addItemToCartHandler} key={meal.id} meal={meal} />
 	));
 
