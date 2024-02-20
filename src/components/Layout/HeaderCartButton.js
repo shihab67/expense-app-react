@@ -1,10 +1,12 @@
-import React, { useContext } from "react";
-import classes from "./HeaderCartButton.module.css";
-import CartContext from "../../store/cart-context";
+import React, { useContext, useState } from "react";
 import ReactDOM from "react-dom";
+import CartContext from "../../store/cart-context";
 import { CartItem } from "../Cart/CartItem";
+import Checkout from "../Cart/Checkout";
+import classes from "./HeaderCartButton.module.css";
 
 export const HeaderCartButton = () => {
+	const [isCheckout, setIsCheckout] = useState(false);
 	const cartCtx = useContext(CartContext);
 	const numOfCartItems = cartCtx.items.reduce((curNumber, item) => {
 		return (curNumber += +item.amount);
@@ -13,6 +15,14 @@ export const HeaderCartButton = () => {
 	const cartItems = cartCtx.items.map((item) => (
 		<CartItem key={item.id} item={item} onRemove={cartCtx.removeItem} />
 	));
+
+	const handleCheckoutForm = () => {
+		setIsCheckout(true);
+	};
+
+	const handleCancelCheckoutForm = () => {
+		setIsCheckout(false);
+	};
 	return (
 		<>
 			<button
@@ -61,21 +71,34 @@ export const HeaderCartButton = () => {
 									</span>
 								</div>
 							</div>
-							<div className="modal-footer">
-								<button
-									type="button"
-									className="btn btn-secondary btn-sm"
-									data-bs-dismiss="modal"
-								>
-									Close
-								</button>
 
-								{cartCtx.items.length > 0 && (
-									<button className="btn btn-success btn-sm">
-										Order
+							{isCheckout && (
+								<Checkout
+									onCancel={handleCancelCheckoutForm}
+									cartItems={cartCtx.items}
+								/>
+							)}
+
+							{!isCheckout && (
+								<div className="modal-footer">
+									<button
+										type="button"
+										className="btn btn-secondary btn-sm"
+										data-bs-dismiss="modal"
+									>
+										Close
 									</button>
-								)}
-							</div>
+
+									{cartCtx.items.length > 0 && (
+										<button
+											className="btn btn-success btn-sm"
+											onClick={handleCheckoutForm}
+										>
+											Order
+										</button>
+									)}
+								</div>
+							)}
 						</div>
 					</div>
 				</div>,
