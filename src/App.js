@@ -4,7 +4,7 @@ import Cart from "./components/Cart/Cart";
 import Layout from "./components/Layout/Layout";
 import Products from "./components/Shop/Products";
 import Notification from "./components/UI/Notification";
-import { sendCartdata } from "./store/cart-slice";
+import { fetchCartData, sendCartdata } from "./store/cart-actions";
 
 let isInitial = true;
 
@@ -13,14 +13,19 @@ function App() {
 	const showCart = useSelector((state) => state.ui.cartIsVisible);
 	const notification = useSelector((state) => state.ui.notification);
 	const cartItems = useSelector((state) => state.cart.items);
+	const totalQuantity = useSelector((state) => state.cart.totalQuantity);
+
+	useEffect(() => {
+		dispatch(fetchCartData());
+	}, [dispatch]);
 
 	useEffect(() => {
 		if (isInitial) {
 			isInitial = false;
 			return;
 		}
-
-		dispatch(sendCartdata(cartItems));
+    
+		dispatch(sendCartdata(cartItems, totalQuantity));
 	}, [cartItems, dispatch]);
 
 	return (
@@ -29,7 +34,7 @@ function App() {
 				<Notification
 					status={notification.status}
 					title={notification.title}
-					message={notification.message}  
+					message={notification.message}
 				/>
 			)}
 			<Layout>
